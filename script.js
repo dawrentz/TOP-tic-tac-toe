@@ -1,3 +1,52 @@
+//edit DOM================================
+const displayController = (function() {
+    //DOM cache
+    // const pos0 = document.querySelector("#pos0");
+    // const pos1 = document.querySelector("#pos1");
+    // const pos2 = document.querySelector("#pos2");
+    // const pos3 = document.querySelector("#pos3");
+    // const pos4 = document.querySelector("#pos4");
+    // const pos5 = document.querySelector("#pos5");
+    // const pos6 = document.querySelector("#pos6");
+    // const pos7 = document.querySelector("#pos7");
+    // const pos8 = document.querySelector("#pos8");
+    const allSquares = document.querySelectorAll(".game-square");
+    const currentTurn = document.querySelector("#current-turn");
+
+    //event listeners
+    allSquares.forEach((square) => {
+        square.addEventListener("click", function() {
+            const posID = square.getAttribute("id");
+            gameFlow.playerTurn(posID);
+
+
+
+            
+            // console.log(posID);
+
+        });
+    });
+    
+    
+
+
+    function updateSquare(pos, player) {
+        document.getElementById(pos).textContent = player;
+    }
+
+    function showCurrentTurn(player) {
+        currentTurn.textContent = player;
+    }
+    
+
+
+    
+
+    return {updateSquare, showCurrentTurn};
+})();
+
+
+//store gameboard and updates in array================================
 const Gameboard = (function() {
     const gameboard = [];   
     for (i = 1; i <=9; i++) {
@@ -13,25 +62,32 @@ const Gameboard = (function() {
     return {gameboard, showGameboard};
 })();
 
+//game controls and trackers================================
 const gameFlow = (function() {
     let turnCounter = 0;
     let winner;
+    let whosTurn = "X";
 
-
-    function playerTurn(player, pos) {
+    function playerTurn(pos) {
+        let player = whosTurn;
         if  (winner === undefined && 
             Gameboard.gameboard[pos] === "-" && 
-            (player === "X" || player === "O") &&
-            (pos >= 0 && pos <= 8)) {
+            (player === "X" || player === "O") && //for console
+            (pos >= 0 && pos <= 8)) { //for console
                 Gameboard.gameboard[pos] = player;
                 Gameboard.showGameboard();
                 winner = getWinner();
+                displayController.updateSquare(pos, player);
+                
+                turnCounter++;
+                
+                if (turnCounter === 9 && winner === undefined) {
+                    console.log("TIE");
+                }
+                if (whosTurn === "X") {whosTurn = "O";} 
+                else {whosTurn = "X"}
+                displayController.showCurrentTurn(whosTurn);
             }
-
-        turnCounter++;
-        if (turnCounter === 9 && winner === undefined) {
-            console.log("TIE");
-        }
     }
         
     function getWinner() {
@@ -54,20 +110,16 @@ const gameFlow = (function() {
         
         if (winner !== undefined) {
             console.log(winner + " is the winner!");
+            //maybe for css
+            console.log("winPos: " + gameFlow.getMatch3Winner());
         }
 
 
         return winner;
     }
 
-    // function checkTie() {
-    //     Gameboard.gameboard.forEach((pos) => {
-    //         if (pos === "-") {
-    //             break;
-    //             return true;
-    //         }
-    //     });
-    // }
+    
+
 
     
     function getMatch3Winner() {
@@ -100,24 +152,27 @@ const gameFlow = (function() {
         }
     }
 
-    return {playerTurn, getMatch3Winner, turnCounter};
+    //run initital current turn
+    displayController.showCurrentTurn(whosTurn);
+    return {playerTurn, getMatch3Winner};
 })();
+
 
 
 
 
 //testing
 Gameboard.showGameboard();
-gameFlow.playerTurn("X", 0);
-gameFlow.playerTurn("O", 1);
-gameFlow.playerTurn("X", 2);
-gameFlow.playerTurn("O", 3);
-gameFlow.playerTurn("X", 4);
-gameFlow.playerTurn("O", 5);
-gameFlow.playerTurn("X", 6);
-gameFlow.playerTurn("O", 7);
-gameFlow.playerTurn("X", 8);
+// gameFlow.playerTurn("X", 0);
+// gameFlow.playerTurn("O", 1);
+// gameFlow.playerTurn("X", 2);
+// gameFlow.playerTurn("O", 3);
+// gameFlow.playerTurn("X", 4);
+// gameFlow.playerTurn("O", 5);
+// gameFlow.playerTurn("X", 6);
+// gameFlow.playerTurn("O", 7);
+// gameFlow.playerTurn("X", 8);
 
-console.log("winPos: " + gameFlow.getMatch3Winner());
+// console.log("winPos: " + gameFlow.getMatch3Winner());
 
 
