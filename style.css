@@ -63,3 +63,22 @@
     /* color: white; */
     
 }
+
+#reset-btn {
+    border: 0;
+    background-color: white;
+
+    margin-top: 2rem;
+    margin-bottom: 0;
+
+    &:hover {
+        padding: 0;
+        margin: calc(2rem - 1px);
+        border-bottom: solid black 1px;
+        border-top: solid black 1px;
+        width: 15rem;
+         
+    }
+
+
+}

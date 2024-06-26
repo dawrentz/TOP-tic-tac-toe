@@ -12,24 +12,21 @@ const displayController = (function() {
     // const pos8 = document.querySelector("#pos8");
     const allSquares = document.querySelectorAll(".game-square");
     const currentTurn = document.querySelector("#current-turn");
+    const resetBtn = document.querySelector("#reset-btn");
 
     //event listeners
     allSquares.forEach((square) => {
         square.addEventListener("click", function() {
             const posID = square.getAttribute("id");
             gameFlow.playerTurn(posID);
-
-
-
-            
-            // console.log(posID);
-
         });
     });
-    
-    
 
+    resetBtn.addEventListener("click", function() {
+        resetGame();
+    });
 
+    //functions
     function updateSquare(pos, player) {
         document.getElementById(pos).textContent = player;
     }
@@ -37,21 +34,32 @@ const displayController = (function() {
     function showCurrentTurn(player) {
         currentTurn.textContent = player;
     }
-    
+    function resetGame() {
+        Gameboard.gameboard.forEach((square, index, array) => {
+            array[index] = "-";
+        });
 
+        allSquares.forEach((square) => {
+            square.textContent = "";
+        });
+        gameFlow.resetGame();
+    }
 
-    
-
-    return {updateSquare, showCurrentTurn};
+    return {updateSquare, showCurrentTurn, resetGame};
 })();
-
 
 //store gameboard and updates in array================================
 const Gameboard = (function() {
     const gameboard = [];   
-    for (i = 1; i <=9; i++) {
-        gameboard.push("-");
-    }
+    
+    const makeGameboard = function() {
+        for (i = 1; i <=9; i++) {
+            gameboard.push("-");
+        }
+    };
+
+
+
     //for console testing
     function showGameboard() {
         console.log("========");
@@ -59,7 +67,9 @@ const Gameboard = (function() {
         console.log(Gameboard.gameboard[3], Gameboard.gameboard[4], Gameboard.gameboard[5]);
         console.log(Gameboard.gameboard[6], Gameboard.gameboard[7], Gameboard.gameboard[8]);
     }
-    return {gameboard, showGameboard};
+
+    makeGameboard();
+    return {gameboard, showGameboard, makeGameboard};
 })();
 
 //game controls and trackers================================
@@ -107,20 +117,13 @@ const gameFlow = (function() {
             getMatch3Winner() === "botHorz") {
                 winner = Gameboard.gameboard[8];
         }
-        
         if (winner !== undefined) {
             console.log(winner + " is the winner!");
             //maybe for css
             console.log("winPos: " + gameFlow.getMatch3Winner());
         }
-
-
         return winner;
     }
-
-    
-
-
     
     function getMatch3Winner() {
         let checkMatchObj = {
@@ -152,9 +155,16 @@ const gameFlow = (function() {
         }
     }
 
+    function resetGame() {
+        turnCounter = 0;
+        whosTurn = "X";
+        winner = undefined;
+        displayController.showCurrentTurn(whosTurn);
+    }
+
     //run initital current turn
     displayController.showCurrentTurn(whosTurn);
-    return {playerTurn, getMatch3Winner};
+    return {playerTurn, getMatch3Winner, resetGame};
 })();
 
 
@@ -174,5 +184,4 @@ Gameboard.showGameboard();
 // gameFlow.playerTurn("X", 8);
 
 // console.log("winPos: " + gameFlow.getMatch3Winner());
-
 
