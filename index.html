@@ -9,19 +9,22 @@
 
 </head>
 <body>
-    <div id="current-turn"></div>
-    <div id="game-board">
-        <div class="game-square top-horz left-vert"  id="0"></div>
-        <div class="game-square top-horz cen-vert"   id="1"></div>
-        <div class="game-square top-horz right-vert" id="2"></div>
-        <div class="game-square cen-horz left-vert"  id="3"></div>
-        <div class="game-square cen-horz cen-vert"   id="4"></div>
-        <div class="game-square cen-horz right-vert" id="5"></div>
-        <div class="game-square bot-horz left-vert"  id="6"></div>
-        <div class="game-square bot-horz cen-vert"   id="7"></div>
-        <div class="game-square bot-horz right-vert" id="8"></div>
+    <div class="content x-background">
+        <div id="current-turn"></div>
+        <div id="game-board">
+            <div class="game-square top-horz left-vert back-diag" id="0"></div>
+            <div class="game-square top-horz cen-vert" id="1"></div>
+            <div class="game-square top-horz right-vert for-diag" id="2"></div>
+            <div class="game-square cen-horz left-vert" id="3"></div>
+            <div class="game-square cen-horz cen-vert back-diag for-diag" id="4"></div>
+            <div class="game-square cen-horz right-vert" id="5"></div>
+            <div class="game-square bot-horz left-vert for-diag" id="6"></div>
+            <div class="game-square bot-horz cen-vert" id="7"></div>
+            <div class="game-square bot-horz right-vert back-diag" id="8"></div>
+        </div>
+        <button id="reset-btn">reset</button>
+        <div class="hidden" id="win-bar"></div>
     </div>
-    <button id="reset-btn">reset</button>
     
 
 

@@ -2,14 +2,46 @@
     background-color: white;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    background-image: "X";
+    /* background-image: "X"; */
+
+    /* position: relative; */
+}
+
+.content {
+    /* max-height: 100vh; */
+    /* max-width: 100vw; */
+    /* position: relative; */
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    gap: 1rem;
+    /* outline: red solid 1px; */
+    width: 100vw;
+    height:100vh;
+    /* margin: auto; */
+    overflow: hidden;
+
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &.x-background {
+        background-image: url(images/cross-svgrepo-com.svg);
+        background-size: 175%;
+    }
+
+    &.o-background {
+        background-image: url(images/circle-svgrepo-com.svg);
+        background-size: 75%;
+    }
+    
+
 }
 
 #current-turn {
     font-size: 15rem;
     font-weight: bolder;
 
-    margin: -4rem auto -5rem;
+    margin: -4rem 0 -5rem;
     /* outline: red solid; */
 }
 
@@ -20,7 +52,7 @@
     grid-template-columns: repeat(3, 1fr);
     width: fit-content;
 
-    margin: 1rem auto;
+    margin: 0 auto;
 
 
     --game-line: 2px;
@@ -39,7 +71,7 @@
     .cen-horz {
         border-bottom: black solid var(--game-line);
     }
-
+    
     .bot-horz,
     .cen-horz {
         border-top: black solid var(--game-line);
@@ -50,35 +82,90 @@
 
 .game-square {
     /* box-sizing: content-box; */
-
+    
     width: 5rem;
     height: 5rem;
-
+    
     display: grid;
     align-content: center;
     justify-content: center;
-
-    font-size: 2.5rem;
+    
+    font-size: 5rem;
     font-weight: bolder;
     /* color: white; */
-    
 }
 
 #reset-btn {
     border: 0;
-    background-color: white;
-
-    margin-top: 2rem;
-    margin-bottom: 0;
-
+    background-color: rgba(255, 255, 255, 0);
+    width: 100vw;
+    
+    /* margin-top: 2rem; */
+    
+    z-index: 1;
     &:hover {
-        padding: 0;
-        margin: calc(2rem - 1px);
-        border-bottom: solid black 1px;
-        border-top: solid black 1px;
-        width: 15rem;
-         
+        background-color: white;
+        /* color: white; */
+        /* background-color: black; */
+
+        /* background-color: #D9D9D9; */
+        outline: solid black 1px;
+        /* border-top: solid black 1px; */
+    }
+}
+
+#win-bar {
+    height: 0.5rem;
+    width: max(200vw, 200vh);
+    background-color: red;
+        
+    
+    &.hidden {
+        display: none;
     }
 
+    &.win-bot-horz {
+        transform: translateY(-6.25rem);
+    }
 
+    &.win-cen-horz {
+        transform: translateY(-11.25rem);
+    }
+
+    &.win-top-horz {
+        transform: translateY(-16.25rem);
+    }
+
+    &.win-left-vert {
+        transform: rotate(90deg) translateY(5.08rem);
+    }
+    
+    &.win-cen-vert {
+        transform: rotate(90deg) translateY(0.04rem);
+    }
+    
+    &.win-right-vert {
+        transform: rotate(90deg) translateY(-5.01rem);
+    }
+
+    &.win-for-diag {
+        transform: rotate(-45deg);
+            left: -48.5rem;
+        top: -12.25rem;
+    }
+
+    &.win-back-diag {
+        transform: rotate(45deg);
+            left: -48.5rem;
+        top: -12.25rem;
+    }
 }
+
+
+
+
+
+
+
+
+

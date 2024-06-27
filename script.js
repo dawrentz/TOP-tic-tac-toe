@@ -1,20 +1,13 @@
 //edit DOM================================
 const displayController = (function() {
     //DOM cache
-    // const pos0 = document.querySelector("#pos0");
-    // const pos1 = document.querySelector("#pos1");
-    // const pos2 = document.querySelector("#pos2");
-    // const pos3 = document.querySelector("#pos3");
-    // const pos4 = document.querySelector("#pos4");
-    // const pos5 = document.querySelector("#pos5");
-    // const pos6 = document.querySelector("#pos6");
-    // const pos7 = document.querySelector("#pos7");
-    // const pos8 = document.querySelector("#pos8");
     const allSquares = document.querySelectorAll(".game-square");
     const currentTurn = document.querySelector("#current-turn");
     const resetBtn = document.querySelector("#reset-btn");
+    const allContent =document.querySelector(".content"); 
 
     //event listeners
+    //run turn on square click
     allSquares.forEach((square) => {
         square.addEventListener("click", function() {
             const posID = square.getAttribute("id");
@@ -31,34 +24,39 @@ const displayController = (function() {
         document.getElementById(pos).textContent = player;
     }
 
-    function showCurrentTurn(player) {
-        currentTurn.textContent = player;
+    function updateBackground(player) {
+        if (player === "X") {
+            allContent.classList.remove("o-background");
+            allContent.classList.add("x-background");
+        } else {
+            allContent.classList.remove("x-background");
+            allContent.classList.add("o-background");
+        }
     }
+
     function resetGame() {
         Gameboard.gameboard.forEach((square, index, array) => {
             array[index] = "-";
         });
-
         allSquares.forEach((square) => {
             square.textContent = "";
         });
         gameFlow.resetGame();
     }
 
-    return {updateSquare, showCurrentTurn, resetGame};
+    return {updateSquare, resetGame, updateBackground};
 })();
 
 //store gameboard and updates in array================================
 const Gameboard = (function() {
     const gameboard = [];   
     
-    const makeGameboard = function() {
+    //initialize gameboard
+    const makeGameboard = (function() {
         for (i = 1; i <=9; i++) {
             gameboard.push("-");
         }
-    };
-
-
+    })();
 
     //for console testing
     function showGameboard() {
@@ -68,7 +66,6 @@ const Gameboard = (function() {
         console.log(Gameboard.gameboard[6], Gameboard.gameboard[7], Gameboard.gameboard[8]);
     }
 
-    makeGameboard();
     return {gameboard, showGameboard, makeGameboard};
 })();
 
@@ -80,12 +77,9 @@ const gameFlow = (function() {
 
     function playerTurn(pos) {
         let player = whosTurn;
-        if  (winner === undefined && 
-            Gameboard.gameboard[pos] === "-" && 
-            (player === "X" || player === "O") && //for console
-            (pos >= 0 && pos <= 8)) { //for console
+        if  (winner === undefined && Gameboard.gameboard[pos] === "-") {
                 Gameboard.gameboard[pos] = player;
-                Gameboard.showGameboard();
+                // Gameboard.showGameboard();
                 winner = getWinner();
                 displayController.updateSquare(pos, player);
                 
@@ -96,13 +90,12 @@ const gameFlow = (function() {
                 }
                 if (whosTurn === "X") {whosTurn = "O";} 
                 else {whosTurn = "X"}
-                displayController.showCurrentTurn(whosTurn);
+                displayController.updateBackground(whosTurn);
             }
     }
         
     function getWinner() {
         let winner;
-        // if (checkTie()) {winner = "tie"}
         if (getMatch3Winner() === "leftVert" ||
             getMatch3Winner() === "topHorz") {
             winner = Gameboard.gameboard[0];
@@ -119,8 +112,7 @@ const gameFlow = (function() {
         }
         if (winner !== undefined) {
             console.log(winner + " is the winner!");
-            //maybe for css
-            console.log("winPos: " + gameFlow.getMatch3Winner());
+            console.log("winPos: " + gameFlow.getMatch3Winner()); //maybe for css
         }
         return winner;
     }
@@ -159,29 +151,13 @@ const gameFlow = (function() {
         turnCounter = 0;
         whosTurn = "X";
         winner = undefined;
-        displayController.showCurrentTurn(whosTurn);
+        displayController.updateBackground(whosTurn);
     }
 
-    //run initital current turn
-    displayController.showCurrentTurn(whosTurn);
     return {playerTurn, getMatch3Winner, resetGame};
 })();
 
-
-
-
-
 //testing
-Gameboard.showGameboard();
-// gameFlow.playerTurn("X", 0);
-// gameFlow.playerTurn("O", 1);
-// gameFlow.playerTurn("X", 2);
-// gameFlow.playerTurn("O", 3);
-// gameFlow.playerTurn("X", 4);
-// gameFlow.playerTurn("O", 5);
-// gameFlow.playerTurn("X", 6);
-// gameFlow.playerTurn("O", 7);
-// gameFlow.playerTurn("X", 8);
-
+// Gameboard.showGameboard();
 // console.log("winPos: " + gameFlow.getMatch3Winner());
 
