@@ -107,7 +107,7 @@
 [data-center="true"] {
     position: relative;
 
-    --win-bar-width: 400rem;    
+    --win-bar-width: 1000rem;    
 
     /* decided on not putting commom css in &::after. Wanted the bar to be completely there or not */
     &[data-win-bar-class="botHorz"]::after {
@@ -118,7 +118,7 @@
         width: var(--win-bar-width);
         background-color: red;
 
-        left: -100rem;
+        left: -500rem;
         top: 7rem;
     }
     &[data-win-bar-class="cenHorz"]::after {
@@ -129,7 +129,7 @@
         width: var(--win-bar-width);
         background-color: red;
 
-        left: -100rem;
+        left: -500rem;
         top: 2rem;
     }
     &[data-win-bar-class="topHorz"]::after {
@@ -140,7 +140,7 @@
         width: var(--win-bar-width);
         background-color: red;
 
-        left: -100rem;
+        left: -500rem;
         top: -3rem;
     }
     &[data-win-bar-class="leftVert"]::after {
@@ -152,7 +152,7 @@
         background-color: red;
 
         rotate: 90deg;
-        left: -202.7rem;
+        left: -502.675rem;
     }
     &[data-win-bar-class="cenVert"]::after {
         position: absolute;
@@ -163,7 +163,7 @@
         background-color: red;
         
         rotate: 90deg;
-        left: -197.6rem;
+        left: -497.625rem;
     }
     &[data-win-bar-class="rightVert"]::after {
         position: absolute;
@@ -174,7 +174,7 @@
         background-color: red;
 
         rotate: 90deg;
-        left: -192.55rem;
+        left: -492.575rem;
     }
     &[data-win-bar-class="forDiag"]::after {
         position: absolute;
@@ -185,7 +185,7 @@
         background-color: red;
 
         rotate: -45deg;
-        left: -195.5rem;
+        left: -495.5rem;
     }
     &[data-win-bar-class="backDiag"]::after {
         position: absolute;
@@ -196,6 +196,6 @@
         background-color: red;
 
         rotate: 45deg;
-        right: -195.5rem;
+        right: -495.5rem;
     }
 }
