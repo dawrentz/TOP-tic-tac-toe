@@ -1,12 +1,15 @@
-//edit DOM================================
+//============================================================================== 
+//edit DOM
+//============================================================================== 
 const displayController = (function() {
-    //DOM cache
+    //=====DOM cache=====//
     const allSquares = document.querySelectorAll(".game-square");
     const resetBtn = document.querySelector("#reset-btn");
     const allContent =document.querySelector(".content"); 
     const centerSquare = document.querySelector("[data-center=\"true\"]");
     
-    //event listeners
+
+    //=====event listeners=====//
     //run turn on square click
     allSquares.forEach((square) => {
         square.addEventListener("click", function() {
@@ -19,12 +22,13 @@ const displayController = (function() {
         resetGame();
     });
     
-    //functions
+    //=====functions=====//
     function updateSquare(pos, player) {
-        document.getElementById(pos).textContent = player;
+        document.getElementById(pos).textContent = player; //run in gameFlow because need whosTurn
     }
     
     function updateBackground(player) {
+        //player is updated when current player ends turn
         if (player === "X") {
             allContent.classList.remove("tie-background");
             allContent.classList.remove("o-background");
@@ -39,30 +43,35 @@ const displayController = (function() {
             allContent.classList.remove("o-background");
             allContent.classList.add("tie-background");
         }
-        
-        
     }
     
-    function resetGame() {
-        Gameboard.gameboard.forEach((square, index, array) => {
-            array[index] = "-";
-        });
-        allSquares.forEach((square) => {
-            square.textContent = "";
-        });
-        showWinBar("");
-        updateBackground("X");
-        gameFlow.resetGame();
-    }
-
     function showWinBar(winPos) {
         centerSquare.setAttribute("data-win-bar-class", winPos);
     }
+
+    function resetGame() {
+        //resets gameboard array to all "-"
+        Gameboard.gameboard.forEach((square, index, array) => {
+            array[index] = "-";
+        });
+        //resets gameboard visually
+        allSquares.forEach((square) => {
+            square.textContent = "";
+        });
+        //remove winBar class
+        showWinBar("");
+        //x always starts
+        updateBackground("X");
+        //cool to see using multiple "resetGame"'s
+        gameFlow.resetGame();
+    }
     
-    return {updateSquare, resetGame, updateBackground, showWinBar};
+    return {updateSquare, updateBackground, showWinBar};
 })();
 
-//store gameboard and updates in array================================
+//============================================================================== 
+//store gameboard and updates in array
+//============================================================================== 
 const Gameboard = (function() {
     const gameboard = [];   
     
@@ -81,46 +90,45 @@ const Gameboard = (function() {
         console.log(Gameboard.gameboard[6], Gameboard.gameboard[7], Gameboard.gameboard[8]);
     }
     
-    return {gameboard, showGameboard, makeGameboard};
+    return {gameboard, showGameboard};
 })();
 
-//game controls and trackers================================
+//============================================================================== 
+//game controls and trackers
+//============================================================================== 
 const gameFlow = (function() {
     let turnCounter = 0;
     let winner;
     let whosTurn = "X";
 
     function playerTurn(pos) {
-        if  (winner === undefined && Gameboard.gameboard[pos] === "-") { //winner !== undefined makes gameboard unclickable
-                Gameboard.gameboard[pos] = whosTurn;
-                // Gameboard.showGameboard(); // console testing
-                displayController.updateSquare(pos, whosTurn);
-                
-                winner = getWinner();
-                turnCounter++;
-                if (whosTurn === "X") {whosTurn = "O";} 
-                else {whosTurn = "X"}
-                
-                if (turnCounter === 9 && winner === undefined) { //runs a displayController function on tie, make else {winner !== undefined}
-                    winner = "TIE";
-                    
-                    //testing
-                    console.log("TIE");
-                }
-                                
-                if (winner !== undefined) {
-                    displayController.updateBackground(winner);
-                    displayController.showWinBar(getMatch3Winner());
+        //checks if square click is valid
+        //winner !== undefined makes gameboard unclickable
+        if  (winner === undefined && Gameboard.gameboard[pos] === "-") { 
+            //=====internal updates=====//
+            Gameboard.gameboard[pos] = whosTurn; 
+            // Gameboard.showGameboard(); // console testing
+            displayController.updateSquare(pos, whosTurn); 
+            
+            winner = getWinner(); //leaning on winner === undefined
+            turnCounter++;
+            if (whosTurn === "X") {whosTurn = "O";} 
+            else {whosTurn = "X"}
+            
+            //=====check finish and update yes/no=====//
+            if (turnCounter === 9 && winner === undefined) {winner = "TIE";}
+                            
+            if (winner !== undefined) {
+                displayController.updateBackground(winner);
+                displayController.showWinBar(getMatch3Winner());
 
-
-                } else {displayController.updateBackground(whosTurn);}
-                
-
-            }
+            } else {displayController.updateBackground(whosTurn);}
+        }
     }
         
     function getWinner() {
         let winner;
+        //group common squares per win position and return X or O winner
         if (getMatch3Winner() === "leftVert" ||
             getMatch3Winner() === "topHorz") {
             winner = Gameboard.gameboard[0];
@@ -135,15 +143,13 @@ const gameFlow = (function() {
             getMatch3Winner() === "botHorz") {
                 winner = Gameboard.gameboard[8];
         }
-        //testing
-        // if (winner !== undefined) {
-            // console.log(winner + " is the winner!");
-            // console.log("winPos: " + gameFlow.getMatch3Winner()); 
-        // }
+        
+        //winner stays undefined if no 3 match yet
         return winner;
     }
     
     function getMatch3Winner() {
+        //store all win positions in object
         let checkMatchObj = {
             leftVert    : checkMatch3(0, 3, 6),
             cenVert     : checkMatch3(1, 4, 7),
@@ -155,12 +161,14 @@ const gameFlow = (function() {
             forDiag     : checkMatch3(6, 4, 2),
         }
         
+        //if 3 match, that win position in object is true. Returns that winning position. Stays undefined if not. 
         let winPos;
         for (let possWin in checkMatchObj) {
             if (checkMatchObj[possWin]) {
                 winPos = possWin;
             }
         }
+        //returns last winning position in list if more than one win
         return winPos;
     }
 
@@ -168,6 +176,8 @@ const gameFlow = (function() {
         let p1 = Gameboard.gameboard[pos1];
         let p2 = Gameboard.gameboard[pos2];
         let p3 = Gameboard.gameboard[pos3];
+
+        //no dashes allowed, returns true if 3 match. 
         if (p1 !== "-" && p2 !== "-" && p3 !== "-") {
             return (p1 === p2 && p2 === p3);
         }
@@ -177,12 +187,7 @@ const gameFlow = (function() {
         turnCounter = 0;
         whosTurn = "X";
         winner = undefined;
-        // displayController.updateBackground(whosTurn);
     }
 
-    return {playerTurn, getMatch3Winner, resetGame};
+    return {playerTurn, resetGame};
 })();
-
-//testing
-// Gameboard.showGameboard();
-// console.log("winPos: " + gameFlow.getMatch3Winner());

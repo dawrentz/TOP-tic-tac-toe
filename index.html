@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tic-tac-toe</title>
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-
 </head>
 <body>
+    <!-- wrapping content because overflow: hidden wouldn't work on body -->
+    <!-- x always starts -->
     <div class="content x-background">
+        <!-- spacers to center grid vertically -->
         <div class="spacer"></div>
         <div class="spacer"></div>
         <div id="game-board">
+            <!-- id is the array index in js Gameboard.gameboard -->
             <div class="game-square top-horz left-vert back-diag" id="0"></div>
             <div class="game-square top-horz cen-vert" id="1"></div>
             <div class="game-square top-horz right-vert for-diag" id="2"></div>
             <div class="game-square cen-horz left-vert" id="3"></div>
+            <!-- link win bar to center square to avoid displacement on viewport resizing -->
+            <!-- using data-win-bar-class as additional class to affect win-bar only -->
             <div class="game-square cen-horz cen-vert back-diag for-diag" 
                 id="4" 
                 data-center="true" 
@@ -27,13 +33,11 @@
             <div class="game-square bot-horz cen-vert" id="7"></div>
             <div class="game-square bot-horz right-vert back-diag" id="8"></div>
         </div>
+        <!-- minimal aesthetic -->
         <button id="reset-btn">⟳</button>
         <div class="spacer"></div>
         <!-- <div class="" id="win-bar"></div> -->
         <!-- <div class="spacer"></div> -->
     </div>
-    
-
-
 </body>
 </html>
